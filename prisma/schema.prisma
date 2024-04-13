@@ -1,0 +1,145 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator prisma_nestjs_graphql {
+  provider = "prisma-nestjs-graphql"
+  output   = "../src/@generated/prisma-nestjs-graphql"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model DimAssortmentSegment {
+  AssortmentSegmentID   Int                   @id
+  AssortmentSegmentType String                @db.VarChar(50)
+  Price                 Float
+  Points                Int
+  FactTransactionItem   FactTransactionItem[]
+}
+
+model DimCardType {
+  CardTypeID           Int                    @id
+  TypeName             String                 @db.VarChar(50)
+  Description          String?
+  DiscountPercentage   Decimal                @db.Decimal(5, 2)
+  FactTransactionCheck FactTransactionCheck[]
+}
+
+model DimDate {
+  DateID               Int                    @id
+  FullDate             DateTime               @db.Timestamp(6)
+  DayOfWeek            String                 @db.VarChar(50)
+  WeekNumber           String                 @db.VarChar(50)
+  CalendarMonth        String                 @db.VarChar(50)
+  CalendarQuarter      String                 @db.VarChar(50)
+  CalendarYear         String                 @db.VarChar(50)
+  FactTransactionCheck FactTransactionCheck[]
+  FactTransactionItem  FactTransactionItem[]
+}
+
+model DimEmployee {
+  EmployeeID           Int                    @id
+  FirstName            String                 @db.VarChar(50)
+  LastName             String                 @db.VarChar(50)
+  Position             String                 @db.VarChar(100)
+  FactTransactionCheck FactTransactionCheck[]
+  FactTransactionItem  FactTransactionItem[]
+}
+
+model DimLocation {
+  LocationID           Int                    @id
+  PartnerName          Int
+  LocationName         String                 @db.VarChar(100)
+  Address              String                 @db.VarChar(255)
+  City                 String                 @db.VarChar(100)
+  State                String?                @db.VarChar(100)
+  ZipCode              String?                @db.VarChar(20)
+  Country              String                 @db.VarChar(100)
+  FactTransactionCheck FactTransactionCheck[]
+  FactTransactionItem  FactTransactionItem[]
+}
+
+model DimLoyaltyUser {
+  LoyaltyUserID        Int                    @id
+  FirstName            String                 @db.VarChar(50)
+  LastName             String                 @db.VarChar(50)
+  Age                  Int
+  FactTransactionCheck FactTransactionCheck[]
+  FactTransactionItem  FactTransactionItem[]
+}
+
+model DimPaymentMethod {
+  PaymentMethodID      Int                    @id
+  TypeName             String                 @db.VarChar(50)
+  Description          String?
+  FactTransactionCheck FactTransactionCheck[]
+}
+
+model DimPromoCampaign {
+  PromoCampaignID      Int                    @id
+  PromoCampaignName    String                 @db.VarChar(100)
+  Description          String
+  StartDate            DateTime               @db.Timestamp(6)
+  EndDate              DateTime?              @db.Timestamp(6)
+  FactTransactionCheck FactTransactionCheck[]
+}
+
+model DimTime {
+  TimeID               Int                    @id
+  FullTime             DateTime               @db.Timestamp(6)
+  HourOfDay            String                 @db.VarChar(50)
+  MinuteOfHour         String                 @db.VarChar(50)
+  AMorPM               String?                @db.VarChar(50)
+  FactTransactionCheck FactTransactionCheck[]
+  FactTransactionItem  FactTransactionItem[]
+}
+
+model FactTransactionCheck {
+  TransactionCheckID    Int               @id @unique @default(autoincrement())
+  DateID                Int
+  TimeID                Int
+  CardTypeID            Int
+  EmployeeID            Int
+  LoyaltyUserID         Int
+  LocationID            Int
+  PromoCampaignID       Int?
+  PaymentMethodID       Int?
+  TimeFromLastCardUsage Int?
+  PointsAccumulated     Int?
+  PointsWithdraw        Int?
+  TotalPrice            Decimal           @db.Decimal(10, 2)
+  CreateDate            DateTime          @default(now()) @db.Timestamp(6)
+  UpdateDate            DateTime?         @default(now()) @db.Timestamp(6)
+  DimCardType           DimCardType       @relation(fields: [CardTypeID], references: [CardTypeID], onDelete: NoAction, onUpdate: NoAction)
+  DimDate               DimDate           @relation(fields: [DateID], references: [DateID], onDelete: NoAction, onUpdate: NoAction)
+  DimEmployee           DimEmployee       @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: NoAction, onUpdate: NoAction)
+  DimLocation           DimLocation       @relation(fields: [LocationID], references: [LocationID], onDelete: NoAction, onUpdate: NoAction)
+  DimLoyaltyUser        DimLoyaltyUser    @relation(fields: [LoyaltyUserID], references: [LoyaltyUserID], onDelete: NoAction, onUpdate: NoAction)
+  DimPaymentMethod      DimPaymentMethod? @relation(fields: [PaymentMethodID], references: [PaymentMethodID], onDelete: NoAction, onUpdate: NoAction)
+  DimPromoCampaign      DimPromoCampaign? @relation(fields: [PromoCampaignID], references: [PromoCampaignID], onDelete: NoAction, onUpdate: NoAction)
+  DimTime               DimTime           @relation(fields: [TimeID], references: [TimeID], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model FactTransactionItem {
+  TransactionItemID    Int                  @id @unique @default(autoincrement())
+  DateID               Int
+  TimeID               Int
+  AssortmentSegmentID  Int
+  EmployeeID           Int
+  LoyaltyUserID        Int
+  LocationID           Int
+  QuantitySold         Int?
+  Price                Int?
+  TotalPoints          Int?
+  CreateDate           DateTime             @default(now()) @db.Timestamp(6)
+  UpdateDate           DateTime?            @default(now()) @db.Timestamp(6)
+  DimAssortmentSegment DimAssortmentSegment @relation(fields: [AssortmentSegmentID], references: [AssortmentSegmentID], onDelete: NoAction, onUpdate: NoAction)
+  DimDate              DimDate              @relation(fields: [DateID], references: [DateID], onDelete: NoAction, onUpdate: NoAction)
+  DimEmployee          DimEmployee          @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: NoAction, onUpdate: NoAction)
+  DimLocation          DimLocation          @relation(fields: [LocationID], references: [LocationID], onDelete: NoAction, onUpdate: NoAction)
+  DimLoyaltyUser       DimLoyaltyUser       @relation(fields: [LoyaltyUserID], references: [LoyaltyUserID], onDelete: NoAction, onUpdate: NoAction)
+  DimTime              DimTime              @relation(fields: [TimeID], references: [TimeID], onDelete: NoAction, onUpdate: NoAction)
+}
