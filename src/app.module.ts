@@ -8,7 +8,8 @@ import { join } from 'node:path';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './config/configuration';
-import { DimLoyaltyUserModule } from './dim/dim-loyalty-user/dim-loyalty-user.module';
+import { DimLoyaltyUserModule } from './dimentions/dim-loyalty-user/dim-loyalty-user.module';
+import { FactTransactionCheckModule } from './facts/fact-transaction-check/fact-transaction-check.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { DimLoyaltyUserModule } from './dim/dim-loyalty-user/dim-loyalty-user.mo
     }),
     PrismaModule,
     DimLoyaltyUserModule,
+    FactTransactionCheckModule,
   ],
   controllers: [AppController],
   providers: [

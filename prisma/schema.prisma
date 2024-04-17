@@ -13,16 +13,15 @@ datasource db {
 }
 
 model DimAssortmentSegment {
-  AssortmentSegmentID   Int                   @id
+  AssortmentSegmentID   Int                   @id @unique
   AssortmentSegmentType String                @db.VarChar(50)
-  Price                 Float
   Points                Int
   
   FactTransactionItem   FactTransactionItem[]
 }
 
 model DimLoyaltyCard {
-  CardTypeID           Int                    @id
+  LoyaltyCardID        Int                    @id @unique
   CardType             String                 @db.VarChar(50)
   DiscountPercentage   Decimal                @db.Decimal(5, 2)
   CardNumber           String                 @db.VarChar(20)
@@ -32,7 +31,7 @@ model DimLoyaltyCard {
 }
 
 model DimDate {
-  DateID               Int                    @id
+  DateID               Int                    @id @unique @default(autoincrement())
   FullDate             DateTime               @db.Timestamp(6)
   DayOfWeek            String                 @db.VarChar(50)
   WeekNumber           String                 @db.VarChar(50)
@@ -44,18 +43,17 @@ model DimDate {
   FactTransactionItem  FactTransactionItem[]
 }
 
-model DimEmployee {
-  EmployeeID           Int                    @id
+model DimSeller {
+  SellerID             Int                    @id @unique
   FirstName            String                 @db.VarChar(50)
   LastName             String                 @db.VarChar(50)
-  Position             String                 @db.VarChar(100)
   
   FactTransactionCheck FactTransactionCheck[]
   FactTransactionItem  FactTransactionItem[]
 }
 
 model DimLocation {
-  LocationID           Int                    @id
+  LocationID           Int                    @id @unique
   PartnerName          Int
   LocationName         String                 @db.VarChar(100)
   Address              String                 @db.VarChar(255)
@@ -69,7 +67,7 @@ model DimLocation {
 }
 
 model DimLoyaltyUser {
-  LoyaltyUserID        Int                    @id
+  LoyaltyUserID        Int                    @id @unique
   FirstName            String                 @db.VarChar(50)
   LastName             String                 @db.VarChar(50)
   Age                  Int
@@ -79,17 +77,17 @@ model DimLoyaltyUser {
 }
 
 model DimPromoCampaign {
-  PromoCampaignID      Int                    @id
+  PromoCampaignID      Int                    @id @unique
   PromoCampaignName    String                 @db.VarChar(100)
   Description          String
   StartDate            DateTime               @db.Timestamp(6)
   EndDate              DateTime?              @db.Timestamp(6)
   
-  FactTransactionCheck FactTransactionCheck[]
-}
+  FactTransactionItem  FactTransactionItem[]
+}     
 
 model DimTime {
-  TimeID               Int                    @id
+  TimeID               Int                    @id @unique @default(autoincrement())
   FullTime             DateTime               @db.Timestamp(6)
   HourOfDay            String                 @db.VarChar(50)
   MinuteOfHour         String                 @db.VarChar(50)
@@ -103,11 +101,11 @@ model FactTransactionCheck {
   TransactionCheckID    Int               @id @unique @default(autoincrement())
   DateID                Int
   TimeID                Int
-  CardTypeID            Int
-  EmployeeID            Int
+  LoyaltyCardID         Int
+  SellerID              Int
   LoyaltyUserID         Int
   LocationID            Int
-  PromoCampaignID       Int?
+  PaymentMethod         String            @db.VarChar(50)
   TimeFromLastCardUsage Int?
   PointsAccumulated     Int?
   PointsWithdraw        Int?
@@ -116,12 +114,11 @@ model FactTransactionCheck {
   CreateDate            DateTime          @default(now()) @db.Timestamp(6)
   UpdateDate            DateTime?         @db.Timestamp(6)
   
-  DimLoyaltyCard        DimLoyaltyCard    @relation(fields: [CardTypeID], references: [CardTypeID], onDelete: NoAction, onUpdate: NoAction)
+  DimLoyaltyCard        DimLoyaltyCard    @relation(fields: [LoyaltyCardID], references: [LoyaltyCardID], onDelete: NoAction, onUpdate: NoAction)
   DimDate               DimDate           @relation(fields: [DateID], references: [DateID], onDelete: NoAction, onUpdate: NoAction)
-  DimEmployee           DimEmployee       @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: NoAction, onUpdate: NoAction)
+  DimSeller             DimSeller         @relation(fields: [SellerID], references: [SellerID], onDelete: NoAction, onUpdate: NoAction)
   DimLocation           DimLocation       @relation(fields: [LocationID], references: [LocationID], onDelete: NoAction, onUpdate: NoAction)
   DimLoyaltyUser        DimLoyaltyUser    @relation(fields: [LoyaltyUserID], references: [LoyaltyUserID], onDelete: NoAction, onUpdate: NoAction)
-  DimPromoCampaign      DimPromoCampaign? @relation(fields: [PromoCampaignID], references: [PromoCampaignID], onDelete: NoAction, onUpdate: NoAction)
   DimTime               DimTime           @relation(fields: [TimeID], references: [TimeID], onDelete: NoAction, onUpdate: NoAction)
 }
 
@@ -130,9 +127,11 @@ model FactTransactionItem {
   DateID               Int
   TimeID               Int
   AssortmentSegmentID  Int
+  PromoCampaignID      Int?
   SellerID             Int
   LoyaltyUserID        Int
   LocationID           Int
+  ItemName             String?              @db.VarChar(50)
   QuantitySold         Int?
   Price                Int?
   TotalPoints          Int?
@@ -142,8 +141,9 @@ model FactTransactionItem {
   
   DimAssortmentSegment DimAssortmentSegment @relation(fields: [AssortmentSegmentID], references: [AssortmentSegmentID], onDelete: NoAction, onUpdate: NoAction)
   DimDate              DimDate              @relation(fields: [DateID], references: [DateID], onDelete: NoAction, onUpdate: NoAction)
-  DimEmployee          DimEmployee          @relation(fields: [SellerID], references: [EmployeeID], onDelete: NoAction, onUpdate: NoAction)
+  DimSeller            DimSeller            @relation(fields: [SellerID], references: [SellerID], onDelete: NoAction, onUpdate: NoAction)
   DimLocation          DimLocation          @relation(fields: [LocationID], references: [LocationID], onDelete: NoAction, onUpdate: NoAction)
   DimLoyaltyUser       DimLoyaltyUser       @relation(fields: [LoyaltyUserID], references: [LoyaltyUserID], onDelete: NoAction, onUpdate: NoAction)
   DimTime              DimTime              @relation(fields: [TimeID], references: [TimeID], onDelete: NoAction, onUpdate: NoAction)
+  DimPromoCampaign     DimPromoCampaign?    @relation(fields: [PromoCampaignID], references: [PromoCampaignID], onDelete: NoAction, onUpdate: NoAction)
 }
