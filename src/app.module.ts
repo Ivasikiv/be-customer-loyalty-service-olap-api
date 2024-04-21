@@ -9,7 +9,16 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './config/configuration';
 import { DimLoyaltyUserModule } from './dimentions/dim-loyalty-user/dim-loyalty-user.module';
+import { DimAssortmentSegmentModule } from './dimentions/dim-assortment-segment/dim-assortment-segment.module';
+import { DimDateModule } from './dimentions/dim-date/dim-date.module';
+import { DimLocationModule } from './dimentions/dim-location/dim-location.module';
+import { DimLoyaltyCardModule } from './dimentions/dim-loyalty-card/dim-loyalty-card.module';
+import { DimPromoCampaignModule } from './dimentions/dim-promo-campaign/dim-promo-campaign.module';
+import { DimSellerModule } from './dimentions/dim-seller/dim-seller.module';
+import { DimTimeModule } from './dimentions/dim-time/dim-time.module';
 import { FactTransactionCheckModule } from './facts/fact-transaction-check/fact-transaction-check.module';
+import { FactTransactionItemModule } from './facts/fact-transaction-item/fact-transaction-item.module';
+import { ETLModule } from './ETL/etl.module';
 
 @Module({
   imports: [
@@ -26,8 +35,17 @@ import { FactTransactionCheckModule } from './facts/fact-transaction-check/fact-
       load: [configuration],
     }),
     PrismaModule,
+    DimAssortmentSegmentModule,
+    DimDateModule,
+    DimLocationModule,
+    DimLoyaltyCardModule,
     DimLoyaltyUserModule,
+    DimPromoCampaignModule,
+    DimSellerModule,
+    DimTimeModule,
     FactTransactionCheckModule,
+    FactTransactionItemModule,
+    ETLModule,
   ],
   controllers: [AppController],
   providers: [
