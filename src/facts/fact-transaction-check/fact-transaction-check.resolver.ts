@@ -2,6 +2,7 @@ import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { FactTransactionCheck } from 'src/@generated/prisma-nestjs-graphql/fact-transaction-check/fact-transaction-check.model';
 import { FactTransactionCheckCreateInput } from 'src/@generated/prisma-nestjs-graphql/fact-transaction-check/fact-transaction-check-create.input';
 import { FactTransactionCheckService } from './fact-transaction-check.service';
+import { CreateFactTransactionCheckInput } from './dto/create-fact-transaction-check.input';
 
 @Resolver(() => FactTransactionCheck)
 export class FactTransactionCheckResolver {
@@ -11,7 +12,7 @@ export class FactTransactionCheckResolver {
 
   @Mutation(() => FactTransactionCheck)
   createFactTransactionCheck(
-    @Args('data') data: FactTransactionCheckCreateInput,
+    @Args('data') data: CreateFactTransactionCheckInput,
   ) {
     return this.factTransactionCheckService.create(data);
   }

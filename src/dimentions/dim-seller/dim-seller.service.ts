@@ -18,6 +18,10 @@ export class DimSellerService {
   }
 
   async create(createData: DimSellerCreateInput): Promise<DimSeller> {
+    const obj = await this.findOne(createData.SellerID);
+    if (obj !== null) {
+      return obj;
+    }
     return this.prismaService.dimSeller.create({
       data: createData,
     });

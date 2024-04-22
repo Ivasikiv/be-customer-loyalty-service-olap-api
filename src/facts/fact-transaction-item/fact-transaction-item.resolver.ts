@@ -2,6 +2,7 @@ import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { FactTransactionItem } from 'src/@generated/prisma-nestjs-graphql/fact-transaction-item/fact-transaction-item.model';
 import { FactTransactionItemCreateInput } from 'src/@generated/prisma-nestjs-graphql/fact-transaction-item/fact-transaction-item-create.input';
 import { FactTransactionItemService } from './fact-transaction-item.service';
+import { CreateFactTransactionItemInput } from './dto/create-fact-transaction-item.input';
 
 @Resolver(() => FactTransactionItem)
 export class FactTransactionItemResolver {
@@ -11,7 +12,7 @@ export class FactTransactionItemResolver {
 
   @Mutation(() => FactTransactionItem)
   createFactTransactionItem(
-    @Args('data') data: FactTransactionItemCreateInput,
+    @Args('data') data: CreateFactTransactionItemInput,
   ) {
     return this.factTransactionItemService.create(data);
   }

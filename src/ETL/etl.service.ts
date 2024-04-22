@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { ETLProcess } from './utills/etl-process';
+import { ETLProcessService } from './utills/etl-extract.service';
 import * as cron from 'node-cron';
 
 @Injectable()
 export class ETLService {
-  constructor(private readonly etlProcess: ETLProcess) {}
+  constructor(private readonly etlProcess: ETLProcessService) {}
 
   async runFullETL(): Promise<void> {
     console.log('Running full ETL process...');

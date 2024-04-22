@@ -17,6 +17,10 @@ export class DimLoyaltyUserService {
   }
 
   async create(createUser: DimLoyaltyUserCreateInput): Promise<DimLoyaltyUser> {
+    const obj = await this.findOne(createUser.LoyaltyUserID);
+    if (obj !== null) {
+      return obj;
+    }
     return await this.prismaService.dimLoyaltyUser.create({
       data: createUser,
     });

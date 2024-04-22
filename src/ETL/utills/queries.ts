@@ -135,3 +135,150 @@ export const EMPLOYEE_QUERY = `
     }
   }
 `;
+
+export const POINT_TRANSACTION_QUERY = `
+query PointTransactionByOrderID($orderId: Int!) {
+  pointTransactionByOrderID(orderID: $orderId) {
+    OrderRecordID
+    PointTransactionID
+    PointTransactionType
+    PointsChange
+  }
+}
+`;
+
+// ------------------- MUTATIONS -------------------
+
+export const LOAD_LOCATION_QUERY = `
+mutation CreateLocation($createData: DimLocationCreateInput!) {
+  createLocation(createData: $createData) {
+    Address
+    City
+    Country
+    LocationID
+    LocationName
+    PartnerName
+    State
+    ZipCode
+  }
+}
+`;
+
+export const LOAD_LOYALTY_CARD_QUERY = `
+mutation CreateLoyaltyCard($createData: DimLoyaltyCardCreateInput!) {
+  createLoyaltyCard(createData: $createData) {
+    CardBalance
+    CardNumber
+    CardType
+    DiscountPercentage
+    LoyaltyCardID
+  }
+}
+`;
+
+export const LOAD_ASSORTMENT_SEGMENT_QUERY = `
+mutation CreateAssortmentSegment($createData: DimAssortmentSegmentCreateInput!) {
+  createAssortmentSegment(createData: $createData) {
+    AssortmentSegmentID
+    AssortmentSegmentType
+    Points
+  }
+}
+`;
+
+export const LOAD_PROMO_CAMPAIGN_QUERY = `
+mutation CreatePromoCampaign($createData: DimPromoCampaignCreateInput!) {
+  createPromoCampaign(createData: $createData) {
+    Description
+    EndDate
+    PromoCampaignID
+    PromoCampaignName
+    StartDate
+  }
+}
+`;
+
+export const LOAD_LOYALTY_USER_QUERY = `
+mutation CreateUser($createData: DimLoyaltyUserCreateInput!) {
+  createUser(createData: $createData) {
+    Age
+    FirstName
+    LastName
+    LoyaltyUserID
+  }
+}
+`;
+
+export const LOAD_SELLER_QUERY = `
+mutation CreateSeller($createData: DimSellerCreateInput!) {
+  createSeller(createData: $createData) {
+    FirstName
+    LastName
+    SellerID
+  }
+}
+`;
+
+export const LOAD_DIM_DATE_QUERY = `
+mutation CreateDimDate($createData: DimDateCreateInput!) {
+  createDimDate(createData: $createData) {
+    CalendarMonth
+    CalendarQuarter
+    CalendarYear
+    DateID
+    DayOfWeek
+    FullDate
+    WeekNumber
+  }
+}
+`;
+
+export const LOAD_DIM_TIME_QUERY = `
+mutation CreateTime($createData: DimTimeCreateInput!) {
+  createTime(createData: $createData) {
+    AMorPM
+    FullTime
+    HourOfDay
+    MinuteOfHour
+    TimeID
+  }
+}
+`;
+
+export const LOAD_ORDER_RECORD_QUERY = `
+mutation CreateFactTransactionCheck($data: CreateFactTransactionCheckInput!) {
+  createFactTransactionCheck(data: $data) {
+    DateID
+    LocationID
+    LoyaltyCardID
+    LoyaltyUserID
+    PaymentMethod
+    PointsAccumulated
+    PointsWithdraw
+    SellerID
+    TimeFromLastCardUsage
+    TimeID
+    TotalPrice
+    TransactionCheckID
+  }
+}
+`;
+
+export const LOAD_ORDER_DETAIL_QUERY = `
+mutation CreateFactTransactionItem($data: CreateFactTransactionItemInput!) {
+  createFactTransactionItem(data: $data) {
+    AssortmentSegmentID
+    DateID
+    ItemName
+    LocationID
+    LoyaltyUserID
+    Price
+    PromoCampaignID
+    QuantitySold
+    SellerID
+    TimeID
+    TotalPoints
+    TransactionItemID
+  }
+}
+`;

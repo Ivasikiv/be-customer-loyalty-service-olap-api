@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "DimLocation" ALTER COLUMN "PartnerName" SET DATA TYPE VARCHAR(100);

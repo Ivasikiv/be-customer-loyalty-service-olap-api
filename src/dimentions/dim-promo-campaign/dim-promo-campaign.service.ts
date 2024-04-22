@@ -20,6 +20,10 @@ export class DimPromoCampaignService {
   async create(
     createData: DimPromoCampaignCreateInput,
   ): Promise<DimPromoCampaign> {
+    const obj = await this.findOne(createData.PromoCampaignID);
+    if (obj !== null) {
+      return obj;
+    }
     return this.prismaService.dimPromoCampaign.create({
       data: createData,
     });

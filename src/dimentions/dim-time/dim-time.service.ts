@@ -18,6 +18,10 @@ export class DimTimeService {
   }
 
   async create(createData: DimTimeCreateInput): Promise<DimTime> {
+    const obj = await this.findOne(createData.TimeID);
+    if (obj !== null) {
+      return obj;
+    }
     return this.prismaService.dimTime.create({
       data: createData,
     });

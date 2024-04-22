@@ -22,8 +22,13 @@ export class DimAssortmentSegmentService {
   async create(
     createAssortmentSegment: DimAssortmentSegmentCreateInput,
   ): Promise<DimAssortmentSegment> {
-    return this.prismaService.dimAssortmentSegment.create({
-      data: createAssortmentSegment,
-    });
+    const obj = await this.findOne(createAssortmentSegment.AssortmentSegmentID);
+    if (obj === null) {
+      return this.prismaService.dimAssortmentSegment.create({
+        data: createAssortmentSegment,
+      });
+    } else {
+      return obj;
+    }
   }
 }

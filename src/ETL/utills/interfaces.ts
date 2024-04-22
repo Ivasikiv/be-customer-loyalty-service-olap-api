@@ -38,7 +38,7 @@ export interface AssortmentSegmentResponse {
   assortmentSegment: {
     AssortmentSegmentID: number;
     AssortmentSegmentType: string;
-    PartnerLocationID: number;
+    // PartnerLocationID: number;
     Points: number;
   };
 }
@@ -47,7 +47,7 @@ export interface PromoCampaignResponse {
   promoCampaign: {
     Description: string;
     EndDate: string;
-    PartnerID: number;
+    // PartnerID: number;
     PromoCampaignID: number;
     PromoCampaignName: string;
     StartDate: string;
@@ -81,7 +81,7 @@ export interface LoyaltyCardForDimention {
   CardType: string;
   DiscountPercentage: number;
   CardNumber: string;
-  CurrentBalance: number;
+  CardBalance: number;
 }
 
 export interface LoyaltyUserResponse {
@@ -128,4 +128,43 @@ export interface EmployeeResponse {
     LastName: string;
     Position: string;
   };
+}
+
+export interface PointTransactionByOrderIDResponse {
+  pointTransactionByOrderID: Array<{
+    OrderRecordID: number;
+    PointTransactionID: number;
+    PointTransactionType: string;
+    PointsChange: number;
+  }>;
+}
+
+export interface FactTransactionCheck {
+  TransactionCheckID: number;
+  DateID: number;
+  TimeID: number;
+  LoyaltyCardID: number;
+  SellerID: number;
+  LoyaltyUserID: number;
+  LocationID: number;
+  PaymentMethod: string;
+  TimeFromLastCardUsage: number;
+  PointsAccumulated: number;
+  PointsWithdraw: number;
+  TotalPrice: number;
+}
+
+export interface FactTransactionItem {
+  TransactionItemID: number;
+  DateID: number;
+  TimeID: number;
+  AssortmentSegmentID: number;
+  PromoCampaignID: number;
+  SellerID: number;
+  LoyaltyUserID: number;
+  LocationID: number;
+  ItemName: string;
+  QuantitySold: number;
+  Price: number;
+  TotalPoints: number;
 }

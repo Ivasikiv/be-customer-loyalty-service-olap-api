@@ -18,6 +18,10 @@ export class DimLocationService {
   }
 
   async create(createData: DimLocationCreateInput): Promise<DimLocation> {
+    const obj = await this.findOne(createData.LocationID);
+    if (obj !== null) {
+      return obj;
+    }
     return this.prismaService.dimLocation.create({
       data: createData,
     });

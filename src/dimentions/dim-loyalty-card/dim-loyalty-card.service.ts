@@ -18,6 +18,10 @@ export class DimLoyaltyCardService {
   }
 
   async create(createData: DimLoyaltyCardCreateInput): Promise<DimLoyaltyCard> {
+    const obj = await this.findOne(createData.LoyaltyCardID);
+    if (obj !== null) {
+      return obj;
+    }
     return this.prismaService.dimLoyaltyCard.create({
       data: createData,
     });

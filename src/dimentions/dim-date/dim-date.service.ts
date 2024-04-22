@@ -18,6 +18,10 @@ export class DimDateService {
   }
 
   async create(createData: DimDateCreateInput): Promise<DimDate> {
+    const obj = await this.findOne(createData.DateID);
+    if (obj !== null) {
+      return obj;
+    }
     return this.prismaService.dimDate.create({
       data: createData,
     });
