@@ -1,8 +1,6 @@
 import { GraphQLClient } from 'graphql-request';
 import * as interfaces from './interfaces';
 import * as queries from './queries';
-import { Prisma } from '@prisma/client';
-import { isDataView } from 'util/types';
 
 export class ETLProcessService {
   private client: GraphQLClient;
@@ -117,10 +115,13 @@ export class ETLProcessService {
 
       await this.transformOrders();
       await this.transformOrderDetails();
+      await this.setTotalPrice();
       await this.loadData();
 
       // console.log(this.factTransactionChecks[0]);
       // console.log(this.factTransactionItems[0]);
+      // console.log(this.factTransactionChecks);
+      // console.log(this.factTransactionItems);
 
       // console.log(this.dimTime);
     } catch (error) {
@@ -280,7 +281,7 @@ export class ETLProcessService {
         CardType: cardType,
         DiscountPercentage: discountPercentage,
         CardNumber: cardResponse.loyaltyCard.CardNumber,
-        CardBalance: cardResponse.loyaltyCard.CurrentBalance,
+        //CardBalance: cardResponse.loyaltyCard.CurrentBalance,
       };
       this.dimLoyaltyCards.push(loyaltyCard);
 
@@ -361,6 +362,8 @@ export class ETLProcessService {
         State: locationResponse.partnerLocation.State,
         ZipCode: locationResponse.partnerLocation.ZipCode,
         Country: locationResponse.partnerLocation.Country,
+        Latitude: Number(locationResponse.partnerLocation.Latitude),
+        Longitude: Number(locationResponse.partnerLocation.Longitude),
       };
 
       this.dimPartnerLocations.push(partnerLocation);
@@ -526,6 +529,27 @@ export class ETLProcessService {
     });
   }
 
+  private async setTotalPrice(): Promise<void> {
+    this.orders.forEach((order) => {
+      const { OrderID } = order;
+      const orderDetails = this.orderDetails.filter(
+        (od) => od.OrderID === OrderID,
+      );
+      const totalPrice = orderDetails.reduce(
+        (total, od) => total + od.Price * od.Quantity,
+        0,
+      );
+
+      const orderIndex = this.factTransactionChecks.findIndex(
+        (ot) => ot.TransactionCheckID === OrderID,
+      );
+
+      if (orderIndex !== -1) {
+        this.factTransactionChecks[orderIndex].TotalPrice = totalPrice;
+      }
+    });
+  }
+
   private transformOrders(): void {
     this.orders.forEach((order) => {
       const {
@@ -562,11 +586,6 @@ export class ETLProcessService {
           ),
         );
 
-      // Calculate TotalPrice from related factTransactionItems
-      const totalPrice = this.factTransactionItems
-        .filter((item) => item.DateID === OrderID)
-        .reduce((sum, item) => sum + item.Price, 0);
-
       // Calculate PointsAccumulated and PointsWithdraw from dimPointTransactions
       const pointTransactionsForOrder = this.dimPointTransactions.filter(
         (pt) => pt.OrderRecordID === OrderID,
@@ -591,10 +610,10 @@ export class ETLProcessService {
         LoyaltyUserID: LoyaltyCardID,
         LocationID,
         PaymentMethod,
-        TimeFromLastCardUsage: timeFromLastCardUsage || 0, // Default to 0 if no previous order found
+        TimeFromLastCardUsage: timeFromLastCardUsage || 0,
         PointsAccumulated: pointsAccumulated,
         PointsWithdraw: pointsWithdraw,
-        TotalPrice: totalPrice,
+        TotalPrice: 0,
       };
 
       // Push the transformed transaction check to your data array

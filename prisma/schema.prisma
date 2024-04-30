@@ -24,8 +24,7 @@ model DimLoyaltyCard {
   LoyaltyCardID        Int                    @id @unique
   CardType             String                 @db.VarChar(50)
   DiscountPercentage   Decimal                @db.Decimal(5, 2)
-  CardNumber           String                 @db.VarChar(20)
-  CardBalance          Int                    
+  CardNumber           String                 @db.VarChar(20)                 
   
   FactTransactionCheck FactTransactionCheck[]
 }
@@ -61,6 +60,8 @@ model DimLocation {
   State                String?                @db.VarChar(100)
   ZipCode              String?                @db.VarChar(20)
   Country              String                 @db.VarChar(100)
+  Latitude             Float
+  Longitude            Float
   
   FactTransactionCheck FactTransactionCheck[]
   FactTransactionItem  FactTransactionItem[]

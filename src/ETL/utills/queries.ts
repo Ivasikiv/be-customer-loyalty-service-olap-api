@@ -121,6 +121,8 @@ export const PARTNER_LOCATION_QUERY = `
       PartnerID
       State
       ZipCode
+      Latitude
+      Longitude
     }
   }
 `;
@@ -160,6 +162,8 @@ mutation CreateLocation($createData: DimLocationCreateInput!) {
     PartnerName
     State
     ZipCode
+    Latitude
+    Longitude
   }
 }
 `;
@@ -167,7 +171,6 @@ mutation CreateLocation($createData: DimLocationCreateInput!) {
 export const LOAD_LOYALTY_CARD_QUERY = `
 mutation CreateLoyaltyCard($createData: DimLoyaltyCardCreateInput!) {
   createLoyaltyCard(createData: $createData) {
-    CardBalance
     CardNumber
     CardType
     DiscountPercentage

@@ -81,7 +81,7 @@ export interface LoyaltyCardForDimention {
   CardType: string;
   DiscountPercentage: number;
   CardNumber: string;
-  CardBalance: number;
+  //CardBalance: number;
 }
 
 export interface LoyaltyUserResponse {
@@ -107,6 +107,8 @@ export interface PartnerLocationRespons {
     PartnerID: number;
     State: string;
     ZipCode: string;
+    Latitude: number;
+    Longitude: number;
   };
 }
 
@@ -119,6 +121,8 @@ export interface DimPartnerLocation {
   State: string;
   ZipCode: string;
   Country: string;
+  Latitude: number;
+  Longitude: number;
 }
 
 export interface EmployeeResponse {
@@ -126,7 +130,7 @@ export interface EmployeeResponse {
     EmployeeID: number;
     FirstName: string;
     LastName: string;
-    Position: string;
+    //Position: string;
   };
 }
 
